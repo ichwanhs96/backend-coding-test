@@ -7,8 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
-    "start": "node index.js"
+    "test": "./node_modules/.bin/eslint ./src/**/*.js && nyc mocha tests",
+    "start": "node ./src/server.js",
+    "test:load": "./node_modules/forever/bin/forever start ./src/server.js && ./node_modules/artillery/bin/artillery run artillery.yml && ./node_modules/forever/bin/forever stopall"
   },
   "keywords": [
     "Xendit"
@@ -16,12 +17,41 @@
   "author": "Bo",
   "license": "ISC",
   "dependencies": {
+    "artillery": "^1.6.0-28",
+    "assert-plus": "^1.0.0",
     "body-parser": "^1.19.0",
+    "expect.js": "^0.3.1",
     "express": "^4.16.4",
-    "sqlite3": "^4.0.6"
+    "express-validation": "^1.0.2",
+    "forever": "^1.0.0",
+    "joi": "^14.3.1",
+    "morgan": "^1.9.1",
+    "pre-push": "^0.1.1",
+    "sqlite3": "^4.0.6",
+    "swagger-ui-express": "^4.0.7",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
+    "eslint": "^6.1.0",
     "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
     "supertest": "^4.0.2"
-  }
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "src/server.js"
+    ],
+    "check-coverage": true,
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80
+  },
+  "pre-push": [
+    "test"
+  ]
 }
