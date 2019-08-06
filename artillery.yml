@@ -1,0 +1,31 @@
+config:
+  target: 'http://localhost:8010'
+  phases:
+    - duration: 30
+      arrivalRate: 100
+  ensure:
+    p99: 50
+scenarios:
+  - name: "Test all ride endpoints"
+    flow:
+      - post:
+          url: "/rides"
+          json:
+            start_lat: 70
+            end_lat: 70
+            start_long: 50
+            end_long: 50
+            rider_name: "bo chen fadlan"
+            driver_name: "moses lo gonzalez"
+            driver_vehicle: "harley davidson"
+      - get:
+          url: "/rides"
+          qs:
+            limit: 10
+            offset: 0
+      - get:
+          url: "/rides/1"
+      - get:
+          url: "/health"
+      - get:
+          url: "/api-docs"
